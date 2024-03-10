@@ -1,5 +1,5 @@
 import pygame
-from src.Colors import colors
+from src.colors import colors
 from pygame import Surface
 class Bullet:
 	def __init__(self, spaceShipX:int, spaceShipY:int):

@@ -1,6 +1,6 @@
 from collections import deque
-from src.Brick import Brick
-from src.Colors import colors
+from src.brick import Brick
+from src.colors import colors
 from random import randrange
 
 
