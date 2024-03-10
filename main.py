@@ -1,9 +1,12 @@
 import pygame
-from src.Spaceship import Spaceship
-from src.Wall import Wall
-from src.Bullet import Bullet
-import math
-from src.spaceships.heroSpaceShip import HeroSpaceShip
+# from src.Wall import Wall
+from src.bullet import Bullet
+# from src.hero_spaceship import hero_spaceship
+
+import math 
+from src.spaceships.hero_spaceship import HeroSpaceship
+from src.spaceships.enemy_spaceship import EnemySpaceship
+# from src import spaceships
 
 
 pygame.init()
@@ -21,11 +24,12 @@ background = pygame.image.load("images\\spaceBackground.jpg").convert()
 
 running = True
 
-spaceShip = Spaceship()
+# spaceShip = Spaceship()
 
-heroSpaceShip =  HeroSpaceShip()
+hero_spaceship =  HeroSpaceship()
+enemy_spaceship = EnemySpaceship()
 
-wall = Wall()
+# wall = Wall()
 
 bullets: list[Bullet] = []
 
@@ -39,7 +43,7 @@ tiles = math.ceil(SCREEN_HEIGHT / background.get_height()) + 1
 def draw_window_and_object():
     screen.blit(background, (0, 0))
 
-    screen.blit(spaceShip.spaceShipObject, (spaceShip.X, spaceShip.Y))
+    screen.blit(hero_spaceship.spaceShipObject, (hero_spaceship.X, hero_spaceship.Y))
 
     # for brick in wall.queue:
     #     pygame.draw.rect(screen, brick.color, pygame.Rect(brick.x, brick.y, brick.width, brick.height), 0, 3)
@@ -70,11 +74,11 @@ def handle_bullets_collision() -> None:
 
 
 
-def handle_movement(keys:list)->None:
-    if keys[pygame.K_RIGHT] and spaceShip.X < SCREEN_WIDTH - 50:
-        spaceShip.X += 10
-    if keys[pygame.K_LEFT] and spaceShip.X > 0:
-        spaceShip.X -= 10
+# def handle_movement(keys:list)->None:
+#     if keys[pygame.K_RIGHT] and spaceShip.X < SCREEN_WIDTH - 50:
+#         spaceShip.X += 10
+#     if keys[pygame.K_LEFT] and spaceShip.X > 0:
+#         spaceShip.X -= 10
 
 
 
@@ -93,16 +97,20 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_COMMA:
-                bullet = spaceShip.fire()
-                bullets.append(bullet)
+                print("haha")
+                # bullet = spaceShip.fire()
+                # bullet = 0
+                # bullets.append(bullet)
 
     keys_pressed = pygame.key.get_pressed()
-    handle_movement(keys_pressed)
+    # handle_movement(keys_pressed)
     # draw_window_and_object()
-    # screen.blit(spaceShip.spaceShipObject, (spaceShip.X, spaceShip.Y))
+    # screen.blit(hero_spaceship.spaceShipObject, (hero_spaceship.X, hero_spaceship.Y))
     # handle_bullets_collision()
-    heroSpaceShip.draw(screen)
-    heroSpaceShip.move(keys_pressed)
+    hero_spaceship.draw(screen)
+    hero_spaceship.move(keys_pressed)
+
+    enemy_spaceship.draw(screen)
     pygame.display.update()
 
 
