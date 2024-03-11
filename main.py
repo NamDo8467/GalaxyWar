@@ -27,8 +27,16 @@ running = True
 # spaceShip = Spaceship()
 
 hero_spaceship =  HeroSpaceship()
-enemy_spaceship = EnemySpaceship()
+enemy_spaceship_1 = EnemySpaceship()
+enemy_spaceship_2 = EnemySpaceship()
 
+enemy_fleet = list[EnemySpaceship]
+enemy_fleet = [enemy_spaceship_1, enemy_spaceship_2]
+enemy_position: dict = {
+    "x": 30,
+    "y": 80
+}
+enemy_position_offset = 0
 # wall = Wall()
 
 bullets: list[Bullet] = []
@@ -80,15 +88,11 @@ def handle_bullets_collision() -> None:
 #     if keys[pygame.K_LEFT] and spaceShip.X > 0:
 #         spaceShip.X -= 10
 
-
-
-
-
 while running:
     clock.tick(45)
     for i in range(0,tiles):
         screen.blit(background, (0, background.get_height() * (-i) + scroll))
-    scroll += 3
+    scroll += 2
     if abs(scroll) > background.get_height(): 
         scroll = 0
     for event in pygame.event.get():
@@ -109,8 +113,6 @@ while running:
     # handle_bullets_collision()
     hero_spaceship.draw(screen)
     hero_spaceship.move(keys_pressed)
-
-    enemy_spaceship.draw(screen)
     pygame.display.update()
 
 
