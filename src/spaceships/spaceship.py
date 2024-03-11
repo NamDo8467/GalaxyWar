@@ -8,13 +8,23 @@ class Spaceship:
         self.x:int = x
         self.y:int = y
         self.name:str = name
-        # if self.name == "hero":
-        #     self.spaceShipSurface: Surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_yellow.png").convert_alpha(), (50, 50)), 180)
+        self._dimension: dict = {
+            "hero":(50,50),
+            "enemy":(25,25),
+            "boss": (80,80)
+        }
+        self.spaceship_surface:Surface
+        if self.name == "hero":
+            self.spaceship_surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_yellow.png").convert_alpha(), self._dimension["hero"]), 180)
+        elif self.name == "enemy":
+            self.spaceship_surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_red.png").convert_alpha(), self._dimension["enemy"]), 0)
+        elif self.name == "boss":
+            self.spaceship_surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_red.png").convert_alpha(), self._dimension["boss"]), 0)
         
-    def draw(self, screen:Surface, spaceship_surface) -> None:
-        screen.blit(spaceship_surface, (self.x, self.y))
+    def draw(self, screen:Surface) -> None:
+        screen.blit(self.spaceship_surface, (self.x, self.y))
         
-    def move(self,keys) -> None:
+    def move(self, key) -> None:
         # if keys[pygame.K_RIGHT] and self.x < 400 - 50: # 400 is the SCREEN_WIDTH and 50 is the width of the spaceship
         #    self.x += 10
         # if keys[pygame.K_LEFT] and self.x > 0:
