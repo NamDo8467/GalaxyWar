@@ -2,7 +2,7 @@ from .spaceship import Spaceship
 from pygame import Surface
 import pygame
 class HeroSpaceship(Spaceship):
-	def __init__(self, x:int = 0, y:int = 420, name:str ="hero")->None:
+	def __init__(self, x:float = 0, y:float = 420, name:str ="hero")->None:
 		super().__init__(x,y,name)
 		# self.spaceship_surface: Surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_yellow.png").convert_alpha(), (50, 50)), 180)
 

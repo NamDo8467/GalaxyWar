@@ -2,7 +2,7 @@ from .spaceship import Spaceship
 import pygame
 from pygame import Surface
 class EnemySpaceship(Spaceship):
-	def __init__(self, x:int = 0, y:int = 0, name:str = "enemy") -> None:
+	def __init__(self, x:float = 0, y:float = 0, name:str = "enemy") -> None:
 		super().__init__(x,y,name)
 		
 		

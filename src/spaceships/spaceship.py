@@ -4,9 +4,9 @@ from src.bullet import Bullet
 
 """Abstract class spaceships (including enemy, boss and hero)"""
 class Spaceship:
-    def __init__(self, x:int, y:int, name:str) -> None:
-        self.x:int = x
-        self.y:int = y
+    def __init__(self, x:float, y:float, name:str) -> None:
+        self.x:float = x
+        self.y:float = y
         self.name:str = name
         self._dimension: dict = {
             "hero":(50,50),
