@@ -45,8 +45,8 @@ scroll = 0
 
 tiles = math.ceil(SCREEN_HEIGHT / background.get_height()) + 1
 
-def create_enemy(x:int, y:int) -> EnemySpaceship:
-    enemy_spaceship = EnemySpaceship("enemy", x, y)
+def create_enemy(x:float, y:int) -> EnemySpaceship:
+    enemy_spaceship = EnemySpaceship(x, y, "enemy")
     return enemy_spaceship
 
 # enemy_fleet.append(create_enemy(0,20))
