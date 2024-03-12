@@ -1,13 +1,8 @@
 import pygame
-# from src.Wall import Wall
 from src.bullet import Bullet
-# from src.hero_spaceship import hero_spaceship
-
 import math 
 from src.spaceships.hero_spaceship import HeroSpaceship
 from src.spaceships.enemy_spaceship import EnemySpaceship
-# from src import spaceships
-
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -27,17 +22,20 @@ running = True
 # spaceShip = Spaceship()
 
 hero_spaceship =  HeroSpaceship()
-enemy_spaceship_1 = EnemySpaceship()
-enemy_spaceship_2 = EnemySpaceship()
+enemy_spaceship_1 = EnemySpaceship(0, 0)
+enemy_spaceship_2 = EnemySpaceship(400/2-(25/2), 0)
+enemy_spaceship_3 = EnemySpaceship(400-25,0)
 
-enemy_fleet = list[EnemySpaceship]
-enemy_fleet = [enemy_spaceship_1, enemy_spaceship_2]
+# enemy_fleet: deque[EnemySpaceship] = deque()
+enemy_fleet: list[EnemySpaceship] = []
+
+
+
 enemy_position: dict = {
     "x": 30,
     "y": 80
 }
 enemy_position_offset = 0
-# wall = Wall()
 
 bullets: list[Bullet] = []
 
@@ -46,6 +44,19 @@ brick_to_remove = None
 scroll = 0
 
 tiles = math.ceil(SCREEN_HEIGHT / background.get_height()) + 1
+
+def create_enemy(x:int, y:int) -> EnemySpaceship:
+    enemy_spaceship = EnemySpaceship("enemy", x, y)
+    return enemy_spaceship
+
+# enemy_fleet.append(create_enemy(0,20))
+# enemy_fleet.append(create_enemy(420-25, 20))
+
+enemy_fleet.append(enemy_spaceship_1)
+enemy_fleet.append(enemy_spaceship_2)
+enemy_fleet.append(enemy_spaceship_3)
+
+is_enemy_in_position: bool = False
 
 
 def draw_window_and_object():
@@ -110,9 +121,26 @@ while running:
     # handle_movement(keys_pressed)
     # draw_window_and_object()
     # screen.blit(hero_spaceship.spaceShipObject, (hero_spaceship.X, hero_spaceship.Y))
-    # handle_bullets_collision()
+    # handle_bullets_collision()        
     hero_spaceship.draw(screen)
     hero_spaceship.move(keys_pressed)
+    # enemy_spaceship_3.draw(screen)
+    if is_enemy_in_position == False:
+        for i in range(0, len(enemy_fleet)):
+            enemy_fleet[i].draw(screen)
+            if not (i%2 == 0): # odd-index position (1,3,5...)
+                if enemy_fleet[i].y < 80:
+                    enemy_fleet[i].move_y()
+                else:
+                    is_enemy_in_position = True
+            else: #even-index position (0,2,4...)
+                if enemy_fleet[i].y < 80:
+                    enemy_fleet[i].move_x_and_y()
+                else: 
+                    is_enemy_in_position = True
+    else:
+        for enemy_spaceship in enemy_fleet:
+            enemy_spaceship.draw(screen)
     pygame.display.update()
 
 
