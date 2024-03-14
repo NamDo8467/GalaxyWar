@@ -10,7 +10,7 @@ class Spaceship:
         self.name:str = name
         self._dimension: dict = {
             "hero":(50,50),
-            "enemy":(25,25),
+            "enemy":(30,30),
             "boss": (80,80)
         }
         self.spaceship_surface:Surface
