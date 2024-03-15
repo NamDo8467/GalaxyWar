@@ -6,7 +6,6 @@ class EnemySpaceship(Spaceship):
 		super().__init__(x,y,name)
 		self.row = row
 		
-		
 	def draw(self, screen)->None:
 		super().draw(screen)
 
@@ -22,9 +21,6 @@ class EnemySpaceship(Spaceship):
 		self.y += 2.2
 
 	def move_x_by(self, distance:float) -> None:
-		if self.x > 225: #225 is the boundary (middle point of the screen width). If the enemy spaceship x-coordinate is bigger then the x-coordinate will be decreasing
-			self.x -= distance
-		else:
-			self.x += distance
+		self.x += distance
 	def move_y_by(self, distance:float) -> None:
 		self.y += distance
