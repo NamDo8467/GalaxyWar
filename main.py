@@ -19,9 +19,10 @@ background = pygame.image.load("images\\spaceBackground.jpg").convert()
 
 running = True
 
-game_level = 2
+game_level = 1
 is_created_game_opening = False
-row = 2
+
+total_rows = 3
 
 hero_spaceship =  HeroSpaceship()
 enemy_spaceship_1 = EnemySpaceship(0, 0)
@@ -51,34 +52,42 @@ def create_an_enemy(x:float, y:float, row:int) -> EnemySpaceship:
 
 def create_enemies_for_level(level: int) -> None:
     number_of_enemy:int = 0
-    x_coordinate:float = SCREEN_WIDTH/6 - SCREEN_WIDTH/6/3 + 45
+    x_coordinate:float = SCREEN_WIDTH/6 + 25
     y_coordinate:float = 0
-    global row
+    distance_to_the_next_spaceship = 1
+    global total_rows
 
     if level == 1: # 4 enemies
         number_of_enemy = 4
         for i in range(0, number_of_enemy):
-            enemy_fleet.append(create_an_enemy(x_coordinate, 130, row))
-            x_coordinate += SCREEN_WIDTH/6.5
+            enemy_fleet.append(create_an_enemy(x_coordinate + (SCREEN_WIDTH/6)*i, 130, total_rows))
+            # distance_to_the_next_spaceship += 1
+            # x_coordinate += (SCREEN_WIDTH/6)
     elif level == 2: # 7 enemies
-        # pass
         distance_to_the_next_spaceship = 1
         number_of_enemy = 8
         for i in range(0, number_of_enemy):
-            if i > 3:
-                row = 2
-                # y_coordinate = dimension["enemy"]
-                print("Yes")
-                enemy_fleet.append(create_an_enemy(x_coordinate,90, row))
+            if i > (3+4*(total_rows - 2)):
+                # x_coordinate = SCREEN_WIDTH/6 + 25
+                # x_coordinate += (SCREEN_WIDTH/6) * distance_to_the_next_spaceship
+                enemy_fleet.append(create_an_enemy(x_coordinate + (SCREEN_WIDTH/6)*i-(4*(total_rows-1)*(SCREEN_WIDTH/6)),90, total_rows))
             else:
-                enemy_fleet.append(create_an_enemy(x_coordinate,130, row))
                 pass
-            x_coordinate = (SCREEN_WIDTH/6 - SCREEN_WIDTH/6/3 + 45) + (SCREEN_WIDTH/6.5)*distance_to_the_next_spaceship
-            if distance_to_the_next_spaceship + 1 > 3:
-                distance_to_the_next_spaceship = 0
-            else:
-                distance_to_the_next_spaceship += 1
+                enemy_fleet.append(create_an_enemy(x_coordinate + (SCREEN_WIDTH/6)*i,130, total_rows))
+                # x_coordinate += (SCREEN_WIDTH/6)
+            # if distance_to_the_next_spaceship + 1 > 3:
+            #     distance_to_the_next_spaceship = 0
+            # else:
+            #     distance_to_the_next_spaceship += 1
             
+def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int = 130) -> None: # number_of_rows is equal to game level
+    if number_of_rows < 1:
+        return
+    number_of_enemy: int = 4
+    x_coordinate:float = SCREEN_WIDTH/6 + 25
+    create_enemies_for_level_recursively(number_of_rows - 1 , y_coordinate - (dimension["enemy"][0]+20))
+    for i in range(0, number_of_enemy):
+        enemy_fleet.append(create_an_enemy(x_coordinate + (SCREEN_WIDTH/6)*i, y_coordinate, number_of_rows))
 
 is_enemy_in_position: bool = False
 
@@ -146,18 +155,20 @@ while running:
     hero_spaceship.move(keys_pressed)
     # enemy_spaceship_3.draw(screen)
     if is_created_game_opening == False:
-        create_enemies_for_level(game_level)
+        create_enemies_for_level_recursively(game_level)
         is_created_game_opening = True
-    # for enemy_spaceship in enemy_fleet:
-    #     # print(enemy_fleet[0].x, enemy_fleet[0].y)
-    #     enemy_spaceship.draw(screen)
+    for enemy_spaceship in enemy_fleet:
+        # print(enemy_fleet[0].x, enemy_fleet[0].y)
+        enemy_spaceship.draw(screen)
     # if is_enemy_in_position == False:
-    #         for i in range(0, len(enemy_fleet)):
+    #     for enemy in enemy_fleet:
+    #         enemy.move_x_by(1.5)
+    #         enemy.move_x_by(-2.5)
     #             pass
     # else:
     #     for enemy_spaceship in enemy_fleet:
     #         enemy_spaceship.draw(screen)
-    # print(len(enemy_fleet))
+    # print(enemy_fleet[0].row, enemy_fleet[0].y)
     pygame.display.update()
 
 
