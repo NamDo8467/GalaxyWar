@@ -3,12 +3,12 @@ from src.bullet import Bullet
 import math 
 from src.spaceships.hero_spaceship import HeroSpaceship
 from src.spaceships.enemy_spaceship import EnemySpaceship
-
+from src.spaceships.spaceship_dimension import dimension
 pygame.init()
 clock = pygame.time.Clock()
 
 TITLE = "GAME"
-SCREEN_WIDTH = 400
+SCREEN_WIDTH = 450
 SCREEN_HEIGHT = 500
 SPACESHIP_X = 0
 SPACESHIP_Y = 420
@@ -19,17 +19,17 @@ background = pygame.image.load("images\\spaceBackground.jpg").convert()
 
 running = True
 
-# spaceShip = Spaceship()
+game_level = 2
+is_created_game_opening = False
+row = 2
 
 hero_spaceship =  HeroSpaceship()
 enemy_spaceship_1 = EnemySpaceship(0, 0)
-enemy_spaceship_2 = EnemySpaceship(400/2-(25/2), 0)
-enemy_spaceship_3 = EnemySpaceship(400-25,0)
+enemy_spaceship_2 = EnemySpaceship(SCREEN_WIDTH/2-(dimension["enemy"][0]/2), 0)
+enemy_spaceship_3 = EnemySpaceship(SCREEN_WIDTH-dimension["enemy"][0],0)
 
 # enemy_fleet: deque[EnemySpaceship] = deque()
 enemy_fleet: list[EnemySpaceship] = []
-
-
 
 enemy_position: dict = {
     "x": 30,
@@ -45,16 +45,40 @@ scroll = 0
 
 tiles = math.ceil(SCREEN_HEIGHT / background.get_height()) + 1
 
-def create_enemy(x:float, y:int) -> EnemySpaceship:
-    enemy_spaceship = EnemySpaceship(x, y, "enemy")
-    return enemy_spaceship
+def create_an_enemy(x:float, y:float, row:int) -> EnemySpaceship:
+    enemy = EnemySpaceship(x,y, "enemy", row)
+    return enemy
 
-# enemy_fleet.append(create_enemy(0,20))
-# enemy_fleet.append(create_enemy(420-25, 20))
+def create_enemies_for_level(level: int) -> None:
+    number_of_enemy:int = 0
+    x_coordinate:float = SCREEN_WIDTH/6 - SCREEN_WIDTH/6/3 + 45
+    y_coordinate:float = 0
+    global row
 
-enemy_fleet.append(enemy_spaceship_1)
-enemy_fleet.append(enemy_spaceship_2)
-enemy_fleet.append(enemy_spaceship_3)
+    if level == 1: # 4 enemies
+        number_of_enemy = 4
+        for i in range(0, number_of_enemy):
+            enemy_fleet.append(create_an_enemy(x_coordinate, 130, row))
+            x_coordinate += SCREEN_WIDTH/6.5
+    elif level == 2: # 7 enemies
+        # pass
+        distance_to_the_next_spaceship = 1
+        number_of_enemy = 8
+        for i in range(0, number_of_enemy):
+            if i > 3:
+                row = 2
+                # y_coordinate = dimension["enemy"]
+                print("Yes")
+                enemy_fleet.append(create_an_enemy(x_coordinate,90, row))
+            else:
+                enemy_fleet.append(create_an_enemy(x_coordinate,130, row))
+                pass
+            x_coordinate = (SCREEN_WIDTH/6 - SCREEN_WIDTH/6/3 + 45) + (SCREEN_WIDTH/6.5)*distance_to_the_next_spaceship
+            if distance_to_the_next_spaceship + 1 > 3:
+                distance_to_the_next_spaceship = 0
+            else:
+                distance_to_the_next_spaceship += 1
+            
 
 is_enemy_in_position: bool = False
 
@@ -77,8 +101,7 @@ def handle_bullets_collision() -> None:
     if len(bullets) == 0:
         return
     for b in bullets:
-        b.draw(screen)
-        # pygame.draw.rect(screen, b.color, b.shape)
+        b.draw(screen)        # pygame.draw.rect(screen, b.color, b.shape)
         # pygame.draw.rect(screen, b["color"], b["shape"])
         # brick_to_remove = None
         # # brick_to_remove = spaceShip.detect_collision(b, wall)
@@ -118,29 +141,23 @@ while running:
                 # bullets.append(bullet)
 
     keys_pressed = pygame.key.get_pressed()
-    # handle_movement(keys_pressed)
-    # draw_window_and_object()
-    # screen.blit(hero_spaceship.spaceShipObject, (hero_spaceship.X, hero_spaceship.Y))
     # handle_bullets_collision()        
     hero_spaceship.draw(screen)
     hero_spaceship.move(keys_pressed)
     # enemy_spaceship_3.draw(screen)
-    if is_enemy_in_position == False:
-        for i in range(0, len(enemy_fleet)):
-            enemy_fleet[i].draw(screen)
-            if not (i%2 == 0): # odd-index position (1,3,5...)
-                if enemy_fleet[i].y < 80:
-                    enemy_fleet[i].move_y()
-                else:
-                    is_enemy_in_position = True
-            else: #even-index position (0,2,4...)
-                if enemy_fleet[i].y < 80:
-                    enemy_fleet[i].move_x_and_y()
-                else: 
-                    is_enemy_in_position = True
-    else:
-        for enemy_spaceship in enemy_fleet:
-            enemy_spaceship.draw(screen)
+    if is_created_game_opening == False:
+        create_enemies_for_level(game_level)
+        is_created_game_opening = True
+    # for enemy_spaceship in enemy_fleet:
+    #     # print(enemy_fleet[0].x, enemy_fleet[0].y)
+    #     enemy_spaceship.draw(screen)
+    # if is_enemy_in_position == False:
+    #         for i in range(0, len(enemy_fleet)):
+    #             pass
+    # else:
+    #     for enemy_spaceship in enemy_fleet:
+    #         enemy_spaceship.draw(screen)
+    # print(len(enemy_fleet))
     pygame.display.update()
 
 
