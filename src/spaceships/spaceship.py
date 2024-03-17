@@ -23,3 +23,9 @@ class Spaceship:
         
     def move(self, key) -> None:
         pass
+    def fire(self) -> Bullet:
+        bullet = Bullet(self.x, self.y)
+        return bullet
+
+    def detect_collision(self) -> None:
+        pass
