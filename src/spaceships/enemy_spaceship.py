@@ -1,10 +1,14 @@
 from .spaceship import Spaceship
-import pygame
 from pygame import Surface
+from .spaceship_dimension import dimension
+
 class EnemySpaceship(Spaceship):
 	def __init__(self, x:float = 0, y:float = 0, name:str = "enemy", row:int = 1) -> None:
 		super().__init__(x,y,name)
 		self.row = row
+		self.width:float = dimension["enemy"][0]
+		self.height:float = dimension["enemy"][1]
+
 		
 	def draw(self, screen)->None:
 		super().draw(screen)
