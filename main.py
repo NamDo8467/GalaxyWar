@@ -22,7 +22,7 @@ running = True
 game_level = 1
 is_created_game_opening = False
 
-total_rows = 3
+total_rows = 2
 
 hero_spaceship =  HeroSpaceship()
 enemy_spaceship_1 = EnemySpaceship(0, 0)
@@ -113,10 +113,10 @@ def handle_bullets_collision() -> None:
         b.draw(screen)        # pygame.draw.rect(screen, b.color, b.shape)
         # pygame.draw.rect(screen, b["color"], b["shape"])
         # brick_to_remove = None
-        # # brick_to_remove = spaceShip.detect_collision(b, wall)
-        # if brick_to_remove:
-        #     bullets.remove(b)
-        #     wall.removeBrick(brick_to_remove)
+        enemy_to_remove = hero_spaceship.detect_collision(b, enemy_fleet)
+        if enemy_to_remove:
+            bullets.remove(b)
+            enemy_fleet.remove(enemy_to_remove)
         b.shape.y = b.shape.y - 3
         # print(len(bullets))
         if b.shape.y < 0:
@@ -145,12 +145,11 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_COMMA:
                 print("haha")
-                # bullet = spaceShip.fire()
+                bullet = hero_spaceship.fire()
                 # bullet = 0
-                # bullets.append(bullet)
+                bullets.append(bullet)
 
     keys_pressed = pygame.key.get_pressed()
-    # handle_bullets_collision()        
     hero_spaceship.draw(screen)
     hero_spaceship.move(keys_pressed)
     # enemy_spaceship_3.draw(screen)
@@ -168,7 +167,9 @@ while running:
     # else:
     #     for enemy_spaceship in enemy_fleet:
     #         enemy_spaceship.draw(screen)
-    # print(enemy_fleet[0].row, enemy_fleet[0].y)
+    
+    # print(len(enemy_fleet))
+    handle_bullets_collision()        
     pygame.display.update()
 
 
