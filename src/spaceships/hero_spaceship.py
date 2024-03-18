@@ -15,11 +15,15 @@ class HeroSpaceship(Spaceship):
 		super().draw(screen)
 
 	def move(self, keys) -> None:
-		if keys[pygame.K_RIGHT] and self.x < 400 - 50: # 400 is the SCREEN_WIDTH and 50 is the width of the spaceship
+		if keys[pygame.K_RIGHT] and self.x < 450 - dimension["hero"][0]: # 450 is the SCREEN_WIDTH
 			self.x += 10
 		if keys[pygame.K_LEFT] and self.x > 0:
 			self.x -= 10
-	def fire(self)->Bullet:
+		# if keys[pygame.K_UP] and self.y > 0:
+		# 	self.y -= 10
+		# if keys[pygame.K_DOWN] and self.y < 420:
+		# 	self.y += 10
+	def fire(self) -> Bullet:
 		return super().fire()
 	def detect_collision(self, bullet:Bullet, enemy_fleet: list[EnemySpaceship]) -> None:
 		for enemy in enemy_fleet:
