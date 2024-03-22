@@ -55,6 +55,10 @@ scoreRect = scoreFont.get_rect()
 scoreRect.x = SCREEN_WIDTH - scoreRect.width - 25
 scoreRect.y = 25
 
+hit_the_left_of_screen = True
+hit_the_right_of_screen = False
+moving_space = 0.7
+
 def create_an_enemy(x:float, y:float, row:int) -> EnemySpaceship:
     enemy = EnemySpaceship(x,y, "enemy", row)
     return enemy
@@ -104,6 +108,7 @@ def handle_level_up()->None:
         game_level += 1
         is_created_game_opening = False
 
+
 while running:
     clock.tick(45)
     for i in range(0,tiles):
@@ -118,9 +123,8 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_COMMA:
-                print("haha")
+                # print("haha")
                 bullet = hero_spaceship.fire()
-                # bullet = 0
                 bullets.append(bullet)
 
     keys_pressed = pygame.key.get_pressed()
@@ -131,9 +135,19 @@ while running:
         is_created_game_opening = True
     for enemy_spaceship in enemy_fleet:
         enemy_spaceship.draw(screen)
+        if hit_the_left_of_screen:
+            enemy_spaceship.move_x_by(moving_space) # move to the right
+            if(enemy_fleet[len(enemy_fleet) - 1].x >= SCREEN_WIDTH - dimension["enemy"][0]):
+                hit_the_right_of_screen = True # that means that it should start moving to the left now
+                hit_the_left_of_screen = False
+        else:
+            enemy_spaceship.move_x_by(-moving_space) # move to the left
+            if(enemy_fleet[0].x <= 0):
+                hit_the_left_of_screen = True # that means that it should start moving to the right now
+                hit_the_right_of_screen = False 
+
     handle_bullets_collision()        
     handle_level_up()    
-    # print(len(enemy_fleet))
     pygame.display.update()
 
 
