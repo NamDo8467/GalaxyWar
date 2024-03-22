@@ -26,6 +26,3 @@ class Spaceship:
     def fire(self) -> Bullet:
         bullet = Bullet(self.x, self.y, self.name)
         return bullet
-
-    def detect_collision(self) -> None:
-        pass
