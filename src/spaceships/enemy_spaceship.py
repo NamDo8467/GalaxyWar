@@ -1,6 +1,8 @@
+import pygame
 from .spaceship import Spaceship
 from pygame import Surface
 from .spaceship_dimension import dimension
+from src.bullet import Bullet
 
 class EnemySpaceship(Spaceship):
 	def __init__(self, x:float = 0, y:float = 0, name:str = "enemy", row:int = 1) -> None:
@@ -12,6 +14,15 @@ class EnemySpaceship(Spaceship):
 		
 	def draw(self, screen)->None:
 		super().draw(screen)
+
+	def fire(self) -> Bullet:
+		return super().fire()
+	
+	def detect_collision(self, bullet:Bullet, hero_spaceship) -> bool:
+		if bullet.shape.colliderect(pygame.Rect(hero_spaceship.x, hero_spaceship.y, hero_spaceship.width, hero_spaceship.height)):
+			return True
+		else: 
+			return False
 
 	def move_x_and_y(self, distance:float = 2.2)->None:
 		if self.x > 225: #225 is the boundary (middle point of the screen width). If the enemy spaceship x-coordinate is bigger then the x-coordinate will be decreasing
