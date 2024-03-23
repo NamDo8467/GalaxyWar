@@ -5,6 +5,12 @@ from src.spaceships.hero_spaceship import HeroSpaceship
 from src.spaceships.enemy_spaceship import EnemySpaceship
 from src.spaceships.spaceship_dimension import dimension
 from src.colors import colors
+import random
+
+from tkinter import *
+from tkinter import messagebox
+
+
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -20,7 +26,7 @@ background = pygame.image.load("images\\spaceBackground.jpg").convert()
 
 running = True
 
-game_level = 1
+game_level = 2
 
 is_created_game_opening = False
 
@@ -40,6 +46,8 @@ enemy_position: dict = {
 enemy_position_offset = 0
 
 bullets: list[Bullet] = []
+
+enemy_bullets: list[Bullet] = []
 
 brick_to_remove = None
 
@@ -85,21 +93,37 @@ def handle_bullets_collision() -> None:
     global score
     global scoreFont
     global font
+    global running 
+    for b in enemy_bullets:
+        b.draw(screen)
+        hit_hero_spaceship = enemy_fleet[0].detect_collision(b, hero_spaceship) # any enemy can detect the collision
+        if hit_hero_spaceship:
+            enemy_bullets.remove(b)
+            Tk().wm_withdraw() #to hide the main window
+            messagebox.showinfo('Info','Game over')
+            running = False   
 
+        b.shape.y = b.shape.y + 3
+        if b.shape.y > SCREEN_HEIGHT:
+            enemy_bullets.remove(b)
+    
     if len(bullets) == 0:
         return
-    for b in bullets:
-        b.draw(screen)
-        enemy_to_remove = hero_spaceship.detect_collision(b, enemy_fleet)
-        if enemy_to_remove:
-            bullets.remove(b)
-            enemy_fleet.remove(enemy_to_remove)
-            score += 10
-            scoreFont = font.render(f'Score: {score}', True, colors["green"])
-        b.shape.y = b.shape.y - 3
-        # print(len(bullets))
-        if b.shape.y < 0:
-            bullets.remove(b)
+    else:
+        for b in bullets:
+            b.draw(screen)
+            enemy_to_remove = hero_spaceship.detect_collision(b, enemy_fleet)
+            if enemy_to_remove:
+                bullets.remove(b)
+                enemy_fleet.remove(enemy_to_remove)
+                score += 10
+                scoreFont = font.render(f'Score: {score}', True, colors["green"])
+            b.shape.y = b.shape.y - 3
+            # print(len(bullets))
+            if b.shape.y < 0:
+                bullets.remove(b)
+    # print(len(enemy_bullets))
+    
             
 def handle_level_up()->None:
     global game_level
@@ -108,7 +132,8 @@ def handle_level_up()->None:
         game_level += 1
         is_created_game_opening = False
 
-
+random_enemy_index = 0
+create_random = True
 while running:
     clock.tick(45)
     for i in range(0,tiles):
@@ -135,6 +160,12 @@ while running:
         is_created_game_opening = True
     for enemy_spaceship in enemy_fleet:
         enemy_spaceship.draw(screen)
+        if len(enemy_bullets) == 0:
+            random_enemy_index = random.randint(0, len(enemy_fleet) - 1)
+            enemy_bullet = enemy_fleet[random_enemy_index].fire()
+            enemy_bullets.append(enemy_bullet)
+            # create_random = False
+        # print(random_enemy_index)
         if hit_the_left_of_screen:
             enemy_spaceship.move_x_by(moving_space) # move to the right
             if(enemy_fleet[len(enemy_fleet) - 1].x >= SCREEN_WIDTH - dimension["enemy"][0]):
@@ -149,6 +180,5 @@ while running:
     handle_bullets_collision()        
     handle_level_up()    
     pygame.display.update()
-
 
 pygame.quit()
