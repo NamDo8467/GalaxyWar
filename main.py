@@ -26,11 +26,9 @@ background = pygame.image.load("images\\spaceBackground.jpg").convert()
 
 running = True
 
-game_level = 2
+game_level = 1
 
 is_created_game_opening = False
-
-total_rows = 2
 
 hero_spaceship =  HeroSpaceship()
 enemy_spaceship_1 = EnemySpaceship(0, 0)
@@ -155,17 +153,17 @@ while running:
     keys_pressed = pygame.key.get_pressed()
     hero_spaceship.draw(screen)
     hero_spaceship.move(keys_pressed)
+
     if is_created_game_opening == False:
         create_enemies_for_level_recursively(game_level)
         is_created_game_opening = True
+        
     for enemy_spaceship in enemy_fleet:
         enemy_spaceship.draw(screen)
         if len(enemy_bullets) == 0:
             random_enemy_index = random.randint(0, len(enemy_fleet) - 1)
             enemy_bullet = enemy_fleet[random_enemy_index].fire()
             enemy_bullets.append(enemy_bullet)
-            # create_random = False
-        # print(random_enemy_index)
         if hit_the_left_of_screen:
             enemy_spaceship.move_x_by(moving_space) # move to the right
             if(enemy_fleet[len(enemy_fleet) - 1].x >= SCREEN_WIDTH - dimension["enemy"][0]):
