@@ -12,11 +12,11 @@ class Spaceship:
         self._dimension: dict = dimension
         self.spaceship_surface:Surface
         if self.name == "hero":
-            self.spaceship_surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_yellow.png").convert_alpha(), self._dimension["hero"]), 180)
+            self.spaceship_surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_red.png").convert_alpha(), self._dimension["hero"]), 180)
         elif self.name == "enemy":
-            self.spaceship_surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_red.png").convert_alpha(), self._dimension["enemy"]), 0)
+            self.spaceship_surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_yellow.png").convert_alpha(), self._dimension["enemy"]), 0)
         elif self.name == "boss":
-            self.spaceship_surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/spaceship_red.png").convert_alpha(), self._dimension["boss"]), 0)
+            self.spaceship_surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/boss_spaceship.png").convert_alpha(), self._dimension["boss"]), 0)
         
     def draw(self, screen:Surface) -> None:
         screen.blit(self.spaceship_surface, (self.x, self.y))
