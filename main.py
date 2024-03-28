@@ -3,6 +3,7 @@ from src.bullet import Bullet
 import math 
 from src.spaceships.hero_spaceship import HeroSpaceship
 from src.spaceships.enemy_spaceship import EnemySpaceship
+from src.spaceships.boss_spaceship import BossSpaceship
 from src.spaceships.spaceship_dimension import dimension
 from src.colors import colors
 import random
@@ -26,7 +27,7 @@ background = pygame.image.load("images\\spaceBackground.jpg").convert()
 
 running = True
 
-game_level = 1
+game_level = 5
 
 is_created_game_opening = False
 
@@ -69,7 +70,18 @@ def create_an_enemy(x:float, y:float, row:int) -> EnemySpaceship:
     enemy = EnemySpaceship(x,y, "enemy", row)
     return enemy
             
+def create_boss() -> BossSpaceship:
+    x = SCREEN_WIDTH/2 - dimension["boss"][0]/2
+    y = 90
+    boss = BossSpaceship(x, y, "boss")
+    return boss
+    # enemy_fleet.append(boss)
+    # return boss
+
 def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int = 130) -> None: # number_of_rows is equal to game level
+    if number_of_rows == 5:
+        enemy_fleet.append(create_boss())
+        return
     if number_of_rows < 1:
         return
     number_of_enemy: int = 4
@@ -160,20 +172,21 @@ while running:
         
     for enemy_spaceship in enemy_fleet:
         enemy_spaceship.draw(screen)
-        if len(enemy_bullets) == 0:
-            random_enemy_index = random.randint(0, len(enemy_fleet) - 1)
-            enemy_bullet = enemy_fleet[random_enemy_index].fire()
-            enemy_bullets.append(enemy_bullet)
-        if hit_the_left_of_screen:
-            enemy_spaceship.move_x_by(moving_space) # move to the right
-            if(enemy_fleet[len(enemy_fleet) - 1].x >= SCREEN_WIDTH - dimension["enemy"][0]):
-                hit_the_right_of_screen = True # that means that it should start moving to the left now
-                hit_the_left_of_screen = False
-        else:
-            enemy_spaceship.move_x_by(-moving_space) # move to the left
-            if(enemy_fleet[0].x <= 0):
-                hit_the_left_of_screen = True # that means that it should start moving to the right now
-                hit_the_right_of_screen = False 
+        if enemy_spaceship.name != "boss":
+            if len(enemy_bullets) == 0:
+                random_enemy_index = random.randint(0, len(enemy_fleet) - 1)
+                enemy_bullet = enemy_fleet[random_enemy_index].fire()
+                enemy_bullets.append(enemy_bullet)
+            if hit_the_left_of_screen:
+                enemy_spaceship.move_x_by(moving_space) # move to the right
+                if(enemy_fleet[len(enemy_fleet) - 1].x >= SCREEN_WIDTH - dimension["enemy"][0]):
+                    hit_the_right_of_screen = True # that means that it should start moving to the left now
+                    hit_the_left_of_screen = False
+            else:
+                enemy_spaceship.move_x_by(-moving_space) # move to the left
+                if(enemy_fleet[0].x <= 0):
+                    hit_the_left_of_screen = True # that means that it should start moving to the right now
+                    hit_the_right_of_screen = False 
 
     handle_bullets_collision()        
     handle_level_up()    
