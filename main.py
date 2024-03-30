@@ -75,8 +75,6 @@ def create_boss() -> BossSpaceship:
     y = 90
     boss = BossSpaceship(x, y, "boss")
     return boss
-    # enemy_fleet.append(boss)
-    # return boss
 
 def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int = 130) -> None: # number_of_rows is equal to game level
     if number_of_rows == 5:
@@ -129,10 +127,8 @@ def handle_bullets_collision() -> None:
                 score += 10
                 scoreFont = font.render(f'Score: {score}', True, colors["green"])
             b.shape.y = b.shape.y - 3
-            # print(len(bullets))
             if b.shape.y < 0:
                 bullets.remove(b)
-    # print(len(enemy_bullets))
     
             
 def handle_level_up()->None:
