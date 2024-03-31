@@ -24,6 +24,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(TITLE)
 background = pygame.image.load("images\\spaceBackground.jpg").convert()
 
+boss_health_point = 200
 
 running = True
 
@@ -76,9 +77,16 @@ def create_boss() -> BossSpaceship:
     boss = BossSpaceship(x, y, "boss")
     return boss
 
+def create_boss_hp_bar(health_point) -> None:
+    pygame.draw.rect(screen, (255,0,0), pygame.Rect(125, 45, 200, 20), 2) # no color-filled inside
+    pygame.draw.rect(screen, (255,0,0), pygame.Rect(125, 45, health_point, 20)) # color-filled inside
+    # pass
+
 def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int = 130) -> None: # number_of_rows is equal to game level
     if number_of_rows == 5:
-        enemy_fleet.append(create_boss())
+        boss = create_boss()
+        # boss.draw_hp_bar(screen)
+        enemy_fleet.append(boss)
         return
     if number_of_rows < 1:
         return
@@ -89,12 +97,6 @@ def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int =
         enemy_fleet.append(create_an_enemy(x_coordinate + (SCREEN_WIDTH/6)*i, y_coordinate, number_of_rows))
 
 is_enemy_in_position: bool = False
-
-
-def draw_window_and_object():
-    screen.blit(background, (0, 0))
-
-    screen.blit(hero_spaceship.spaceShipObject, (hero_spaceship.X, hero_spaceship.Y))
 
 
 def handle_bullets_collision() -> None:
@@ -164,6 +166,7 @@ while running:
 
     if is_created_game_opening == False:
         create_enemies_for_level_recursively(game_level)
+
         is_created_game_opening = True
         
     for enemy_spaceship in enemy_fleet:
@@ -183,7 +186,7 @@ while running:
                 if(enemy_fleet[0].x <= 0):
                     hit_the_left_of_screen = True # that means that it should start moving to the right now
                     hit_the_right_of_screen = False 
-
+    create_boss_hp_bar(boss_health_point)
     handle_bullets_collision()        
     handle_level_up()    
     pygame.display.update()
