@@ -39,7 +39,7 @@ enemy_spaceship_1 = EnemySpaceship(0, 0)
 enemy_spaceship_2 = EnemySpaceship(SCREEN_WIDTH/2-(dimension["enemy"][0]/2), 0)
 enemy_spaceship_3 = EnemySpaceship(SCREEN_WIDTH-dimension["enemy"][0],0)
 
-enemy_fleet: list[EnemySpaceship] = []
+enemy_fleet: list = []
 
 enemy_position: dict = {
     "x": 30,
