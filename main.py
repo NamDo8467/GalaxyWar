@@ -24,6 +24,9 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(TITLE)
 background = pygame.image.load("images\\spaceBackground.jpg").convert()
 
+boss_health_point = 200
+
+# boss: BossSpaceship = BossSpaceship(0,0, "boss")
 
 running = True
 
@@ -36,7 +39,7 @@ enemy_spaceship_1 = EnemySpaceship(0, 0)
 enemy_spaceship_2 = EnemySpaceship(SCREEN_WIDTH/2-(dimension["enemy"][0]/2), 0)
 enemy_spaceship_3 = EnemySpaceship(SCREEN_WIDTH-dimension["enemy"][0],0)
 
-enemy_fleet: list[EnemySpaceship] = []
+enemy_fleet: list = []
 
 enemy_position: dict = {
     "x": 30,
@@ -73,12 +76,18 @@ def create_an_enemy(x:float, y:float, row:int) -> EnemySpaceship:
 def create_boss() -> BossSpaceship:
     x = SCREEN_WIDTH/2 - dimension["boss"][0]/2
     y = 90
-    boss = BossSpaceship(x, y, "boss")
+    boss = BossSpaceship(x,y, "boss")
     return boss
+
+def create_boss_hp_bar(health_point) -> None:
+    pygame.draw.rect(screen, (255,0,0), pygame.Rect(125, 45, 200, 20), 2) # no color-filled inside
+    pygame.draw.rect(screen, (255,0,0), pygame.Rect(125, 45, health_point, 20)) # color-filled inside
+    # pass
 
 def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int = 130) -> None: # number_of_rows is equal to game level
     if number_of_rows == 5:
-        enemy_fleet.append(create_boss())
+        boss = create_boss()
+        enemy_fleet.append(boss)
         return
     if number_of_rows < 1:
         return
@@ -89,12 +98,6 @@ def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int =
         enemy_fleet.append(create_an_enemy(x_coordinate + (SCREEN_WIDTH/6)*i, y_coordinate, number_of_rows))
 
 is_enemy_in_position: bool = False
-
-
-def draw_window_and_object():
-    screen.blit(background, (0, 0))
-
-    screen.blit(hero_spaceship.spaceShipObject, (hero_spaceship.X, hero_spaceship.Y))
 
 
 def handle_bullets_collision() -> None:
@@ -123,7 +126,10 @@ def handle_bullets_collision() -> None:
             enemy_to_remove = hero_spaceship.detect_collision(b, enemy_fleet)
             if enemy_to_remove:
                 bullets.remove(b)
-                enemy_fleet.remove(enemy_to_remove)
+                if enemy_to_remove.name == "boss":
+                    enemy_to_remove.health_point -= 2
+                else:
+                    enemy_fleet.remove(enemy_to_remove)
                 score += 10
                 scoreFont = font.render(f'Score: {score}', True, colors["green"])
             b.shape.y = b.shape.y - 3
@@ -164,10 +170,13 @@ while running:
 
     if is_created_game_opening == False:
         create_enemies_for_level_recursively(game_level)
+
         is_created_game_opening = True
         
     for enemy_spaceship in enemy_fleet:
+        enemy_spaceship.y = 90
         enemy_spaceship.draw(screen)
+        # print(enemy_spaceship.x)
         if enemy_spaceship.name != "boss":
             if len(enemy_bullets) == 0:
                 random_enemy_index = random.randint(0, len(enemy_fleet) - 1)
@@ -182,8 +191,10 @@ while running:
                 enemy_spaceship.move_x_by(-moving_space) # move to the left
                 if(enemy_fleet[0].x <= 0):
                     hit_the_left_of_screen = True # that means that it should start moving to the right now
-                    hit_the_right_of_screen = False 
-
+                    hit_the_right_of_screen = False
+        else:
+            enemy_spaceship.draw_health_bar(screen)
+             
     handle_bullets_collision()        
     handle_level_up()    
     pygame.display.update()

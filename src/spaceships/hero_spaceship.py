@@ -25,7 +25,7 @@ class HeroSpaceship(Spaceship):
 		# 	self.y += 10
 	def fire(self) -> Bullet:
 		return super().fire()
-	def detect_collision(self, bullet:Bullet, enemy_fleet: list[EnemySpaceship]) -> EnemySpaceship:
+	def detect_collision(self, bullet:Bullet, enemy_fleet: list) -> EnemySpaceship: # or return a BossSpaceship
 		for enemy in enemy_fleet:
 			if bullet.shape.colliderect(pygame.Rect(enemy.x, enemy.y, enemy.width, enemy.height)):
 				return enemy
