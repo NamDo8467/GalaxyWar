@@ -10,7 +10,7 @@ import random
 
 from tkinter import *
 from tkinter import messagebox
-
+from typing import Union
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -26,20 +26,18 @@ background = pygame.image.load("images\\spaceBackground.jpg").convert()
 
 boss_health_point = 200
 
-# boss: BossSpaceship = BossSpaceship(0,0, "boss")
-
 running = True
 
 game_level = 5
 
 is_created_game_opening = False
 
-hero_spaceship =  HeroSpaceship()
+hero_spaceship =  HeroSpaceship(SCREEN_WIDTH/2 - dimension["hero"][0]/2, 420, "hero")
 enemy_spaceship_1 = EnemySpaceship(0, 0)
 enemy_spaceship_2 = EnemySpaceship(SCREEN_WIDTH/2-(dimension["enemy"][0]/2), 0)
 enemy_spaceship_3 = EnemySpaceship(SCREEN_WIDTH-dimension["enemy"][0],0)
 
-enemy_fleet: list = []
+enemy_fleet: list[Union[EnemySpaceship, BossSpaceship]] = []
 
 enemy_position: dict = {
     "x": 30,
@@ -112,11 +110,11 @@ def handle_bullets_collision() -> None:
             enemy_bullets.remove(b)
             Tk().wm_withdraw() #to hide the main window
             messagebox.showinfo('Info','Game over')
-            running = False   
-
-        b.shape.y = b.shape.y + 3
-        if b.shape.y > SCREEN_HEIGHT:
-            enemy_bullets.remove(b)
+            running = False
+        else:   
+            b.shape.y = b.shape.y + 3
+            if b.shape.y > SCREEN_HEIGHT:
+                enemy_bullets.remove(b)
     
     if len(bullets) == 0:
         return
@@ -176,7 +174,6 @@ while running:
     for enemy_spaceship in enemy_fleet:
         enemy_spaceship.y = 90
         enemy_spaceship.draw(screen)
-        # print(enemy_spaceship.x)
         if enemy_spaceship.name != "boss":
             if len(enemy_bullets) == 0:
                 random_enemy_index = random.randint(0, len(enemy_fleet) - 1)
@@ -194,6 +191,9 @@ while running:
                     hit_the_right_of_screen = False
         else:
             enemy_spaceship.draw_health_bar(screen)
+            boss_bullet = enemy_spaceship.fire()
+            if len(enemy_bullets) <= 6:
+                enemy_bullets.append(boss_bullet)
              
     handle_bullets_collision()        
     handle_level_up()    
