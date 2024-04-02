@@ -39,7 +39,7 @@ enemy_spaceship_1 = EnemySpaceship(0, 0)
 enemy_spaceship_2 = EnemySpaceship(SCREEN_WIDTH/2-(dimension["enemy"][0]/2), 0)
 enemy_spaceship_3 = EnemySpaceship(SCREEN_WIDTH-dimension["enemy"][0],0)
 
-enemy_fleet: list = []
+enemy_fleet: list[EnemySpaceship] = []
 
 enemy_position: dict = {
     "x": 30,
@@ -176,7 +176,6 @@ while running:
     for enemy_spaceship in enemy_fleet:
         enemy_spaceship.y = 90
         enemy_spaceship.draw(screen)
-        # print(enemy_spaceship.x)
         if enemy_spaceship.name != "boss":
             if len(enemy_bullets) == 0:
                 random_enemy_index = random.randint(0, len(enemy_fleet) - 1)
@@ -194,6 +193,9 @@ while running:
                     hit_the_right_of_screen = False
         else:
             enemy_spaceship.draw_health_bar(screen)
+            boss_bullet = enemy_spaceship.fire()
+            if len(enemy_bullets) <= 6:
+                enemy_bullets.append(boss_bullet)
              
     handle_bullets_collision()        
     handle_level_up()    
