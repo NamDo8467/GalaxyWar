@@ -34,7 +34,7 @@ game_level = 5
 
 is_created_game_opening = False
 
-hero_spaceship =  HeroSpaceship()
+hero_spaceship =  HeroSpaceship(SCREEN_WIDTH/2 - dimension["hero"][0]/2, 420, "hero")
 enemy_spaceship_1 = EnemySpaceship(0, 0)
 enemy_spaceship_2 = EnemySpaceship(SCREEN_WIDTH/2-(dimension["enemy"][0]/2), 0)
 enemy_spaceship_3 = EnemySpaceship(SCREEN_WIDTH-dimension["enemy"][0],0)
@@ -112,11 +112,11 @@ def handle_bullets_collision() -> None:
             enemy_bullets.remove(b)
             Tk().wm_withdraw() #to hide the main window
             messagebox.showinfo('Info','Game over')
-            running = False   
-
-        b.shape.y = b.shape.y + 3
-        if b.shape.y > SCREEN_HEIGHT:
-            enemy_bullets.remove(b)
+            running = False
+        else:   
+            b.shape.y = b.shape.y + 3
+            if b.shape.y > SCREEN_HEIGHT:
+                enemy_bullets.remove(b)
     
     if len(bullets) == 0:
         return
