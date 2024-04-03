@@ -28,7 +28,7 @@ boss_health_point = 200
 
 running = True
 
-game_level = 5
+game_level = 1
 
 is_created_game_opening = False
 
