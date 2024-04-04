@@ -19,7 +19,7 @@ class EnemySpaceship(Spaceship):
 		return super().fire()
 	
 	def detect_collision(self, bullet:Bullet, hero_spaceship) -> bool:
-		if bullet.shape.colliderect(pygame.Rect(hero_spaceship.x, hero_spaceship.y, hero_spaceship.width, hero_spaceship.height)):
+		if pygame.Rect(bullet.x, bullet.y, bullet.width, bullet.height).colliderect(pygame.Rect(hero_spaceship.x, hero_spaceship.y, hero_spaceship.width, hero_spaceship.height)):
 			return True
 		else: 
 			return False
