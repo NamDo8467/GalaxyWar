@@ -9,11 +9,11 @@ class Bullet:
 		self.width:float = 5
 		self.height:float = 30
 		self.color = colors["green"] if name == "hero" else colors["red"]
-		# self.shape = pygame.Rect(self.x, self.y, 5, 15)
+		self.shape:Surface
 		if name == "hero":
-			self.shape:Surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/laserGreen13.png").convert_alpha(), (self.width,self.height)), 0)
+			self.shape = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/laserGreen13.png").convert_alpha(), (self.width,self.height)), 0)
 		else:
-			self.shape:Surface = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/laserRed13.png").convert_alpha(), (self.width,self.height)), 0)
+			self.shape = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("images/laserRed13.png").convert_alpha(), (self.width,self.height)), 0)
 
 	def draw(self, screen: Surface)->None:
 		screen.blit(self.shape, (self.x, self.y))
