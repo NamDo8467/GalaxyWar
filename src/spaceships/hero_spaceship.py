@@ -26,6 +26,6 @@ class HeroSpaceship(Spaceship):
 	
 	def detect_collision(self, bullet:Bullet, enemy_fleet: list) -> Union[EnemySpaceship, BossSpaceship, None]: # or return a BossSpaceship
 		for enemy in enemy_fleet:
-			if bullet.shape.colliderect(pygame.Rect(enemy.x, enemy.y, enemy.width, enemy.height)):
+			if pygame.Rect(bullet.x, bullet.y, bullet.width, bullet.height).colliderect(pygame.Rect(enemy.x, enemy.y, enemy.width, enemy.height)):
 				return enemy
 		return None
