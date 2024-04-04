@@ -33,9 +33,6 @@ game_level = 1
 is_created_game_opening = False
 
 hero_spaceship =  HeroSpaceship(SCREEN_WIDTH/2 - dimension["hero"][0]/2, 420, "hero")
-enemy_spaceship_1 = EnemySpaceship(0, 0)
-enemy_spaceship_2 = EnemySpaceship(SCREEN_WIDTH/2-(dimension["enemy"][0]/2), 0)
-enemy_spaceship_3 = EnemySpaceship(SCREEN_WIDTH-dimension["enemy"][0],0)
 
 enemy_fleet: list[Union[EnemySpaceship, BossSpaceship]] = []
 
@@ -66,8 +63,8 @@ hit_the_left_of_screen = True
 hit_the_right_of_screen = False
 moving_space = 0.7
 
-def create_an_enemy(x:float, y:float, row:int) -> EnemySpaceship:
-    enemy = EnemySpaceship(x,y, "enemy", row)
+def create_an_enemy(x:float, y:float) -> EnemySpaceship:
+    enemy = EnemySpaceship(x,y, "enemy")
     return enemy
             
 def create_boss() -> BossSpaceship:
@@ -92,10 +89,7 @@ def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int =
     x_coordinate:float = SCREEN_WIDTH/6 + 25
     create_enemies_for_level_recursively(number_of_rows - 1 , y_coordinate - (dimension["enemy"][0]+20))
     for i in range(0, number_of_enemy):
-        enemy_fleet.append(create_an_enemy(x_coordinate + (SCREEN_WIDTH/6)*i, y_coordinate, number_of_rows))
-
-is_enemy_in_position: bool = False
-
+        enemy_fleet.append(create_an_enemy(x_coordinate + (SCREEN_WIDTH/6)*i, y_coordinate))
 
 def handle_bullets_collision() -> None:
     global score
@@ -137,7 +131,9 @@ def handle_bullets_collision() -> None:
 def handle_level_up()->None:
     global game_level
     global is_created_game_opening
+    global bullets
     if len(enemy_fleet) == 0:
+        bullets.clear()
         game_level += 1
         is_created_game_opening = False
 
@@ -159,7 +155,6 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_COMMA:
-                # print("haha")
                 bullet = hero_spaceship.fire()
                 bullets.append(bullet)
 
@@ -173,7 +168,7 @@ while running:
         is_created_game_opening = True
         
     for enemy_spaceship in enemy_fleet:
-        enemy_spaceship.y = 90
+        # enemy_spaceship.y = 90
         enemy_spaceship.draw(screen)
         if enemy_spaceship.name != "boss":
             if len(enemy_bullets) == 0:
@@ -197,7 +192,6 @@ while running:
                 enemy_bullets.append(boss_bullet)
              
     handle_bullets_collision()     
-    # test_bullets()   
     handle_level_up()    
     pygame.display.update()
 
