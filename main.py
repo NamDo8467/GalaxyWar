@@ -43,6 +43,7 @@ enemy_position: dict = {
     "x": 30,
     "y": 80
 }
+enemy_position_offset = 0
 
 bullets: list[Bullet] = []
 
@@ -111,8 +112,8 @@ def handle_bullets_collision() -> None:
             messagebox.showinfo('Info','Game over')
             running = False
         else:   
-            b.y = b.y + 3
-            if b.y > SCREEN_HEIGHT:
+            b.shape.y = b.shape.y + 3
+            if b.shape.y > SCREEN_HEIGHT:
                 enemy_bullets.remove(b)
     
     if len(bullets) == 0:
@@ -129,8 +130,8 @@ def handle_bullets_collision() -> None:
                     enemy_fleet.remove(enemy_to_remove)
                 score += 10
                 scoreFont = font.render(f'Score: {score}', True, colors["green"])
-            b.y = b.y - 3
-            if b.y < 0:
+            b.shape.y = b.shape.y - 3
+            if b.shape.y < 0:
                 bullets.remove(b)
     
             
@@ -143,8 +144,6 @@ def handle_level_up()->None:
 
 random_enemy_index = 0
 create_random = True
-
-    
 while running:
     clock.tick(45)
     for i in range(0,tiles):
@@ -196,8 +195,7 @@ while running:
             if len(enemy_bullets) <= 6:
                 enemy_bullets.append(boss_bullet)
              
-    handle_bullets_collision()     
-    # test_bullets()   
+    handle_bullets_collision()        
     handle_level_up()    
     pygame.display.update()
 
