@@ -1,3 +1,6 @@
+# Galaxy War
+This game is about shooting galaxy invaders. There are 5 levels in total, you have to shoot the small invaders in the first four levels and a big boss at level 5. For every bullet that hits the enemy, you will gain 10 points but try to dodge all the enemy's bullets because the game is over as soon as you get shot.
+
 # Scrolling background image algorithm
 ```
 tiles = math.ceil(SCREEN_HEIGHT / background.get_height()) + 1
