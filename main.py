@@ -15,11 +15,13 @@ from typing import Union
 pygame.init()
 clock = pygame.time.Clock()
 
-TITLE = "GAME"
+TITLE = "Galaxy War"
 SCREEN_WIDTH = 450
 SCREEN_HEIGHT = 500
 SPACESHIP_X = 0
 SPACESHIP_Y = 420
+FIRE_EVENT = pygame.USEREVENT + 1
+triggered_fire_event = FALSE
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(TITLE)
 background = pygame.image.load("images\\spaceBackground.jpg").convert()
@@ -140,7 +142,7 @@ def handle_level_up()->None:
 random_enemy_index = 0
 create_random = True
 
-    
+        
 while running:
     clock.tick(45)
     for i in range(0,tiles):
@@ -155,8 +157,14 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_COMMA:
+                if triggered_fire_event == FALSE: # if the FIRE_EVENT has not been triggered then:
+                    pygame.time.set_timer(FIRE_EVENT, 300)
+                    triggered_fire_event = TRUE
+        if event.type == FIRE_EVENT:
+                pygame.time.set_timer(FIRE_EVENT, 0) # disable the event
                 bullet = hero_spaceship.fire()
-                bullets.append(bullet)
+                bullets.append(bullet) 
+                triggered_fire_event = FALSE # set the FIRE_EVENT status to "not triggered"
 
     keys_pressed = pygame.key.get_pressed()
     hero_spaceship.draw(screen)
