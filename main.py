@@ -82,10 +82,13 @@ def create_boss_hp_bar(health_point) -> None:
 
 def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int = 130) -> None: # number_of_rows is equal to game level
     global running
+    global enemy_bullets
     if number_of_rows > 5:
-        Tk().wm_withdraw() #to hide the main window
-        messagebox.showinfo('Info','Congratulations, you have finished the game')
-        running = False
+        # enemy_bullets.clear()
+        # Tk().wm_withdraw() #to hide the main window
+        # messagebox.showinfo('Info','Congratulations, you have finished the game')
+        # running = False
+        return
     if number_of_rows == 5:
         boss = create_boss()
         enemy_fleet.append(boss)
@@ -126,6 +129,8 @@ def handle_bullets_collision() -> None:
                 bullets.remove(b)
                 if enemy_to_remove.name == "boss":
                     enemy_to_remove.health_point -= 2
+                    if enemy_to_remove.health_point <= 0:
+                        enemy_fleet.remove(enemy_to_remove)
                 else:
                     enemy_fleet.remove(enemy_to_remove)
                 score += 10
@@ -143,6 +148,9 @@ def handle_level_up()->None:
         bullets.clear()
         game_level += 1
         is_created_game_opening = False
+        if game_level == 6:
+            Tk().wm_withdraw() #to hide the main window
+            messagebox.showinfo('Info','Congratulations, you have finished the game')
 
 random_enemy_index = 0
 create_random = True
@@ -163,7 +171,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_COMMA:
                 if triggered_fire_event == FALSE: # if the FIRE_EVENT has not been triggered then:
-                    pygame.time.set_timer(FIRE_EVENT, 300)
+                    pygame.time.set_timer(FIRE_EVENT, 200)
                     triggered_fire_event = TRUE
         if event.type == FIRE_EVENT:
                 pygame.time.set_timer(FIRE_EVENT, 0) # disable the event
@@ -204,8 +212,9 @@ while running:
             if len(enemy_bullets) <= 6:
                 enemy_bullets.append(boss_bullet)
              
-    handle_bullets_collision()     
-    handle_level_up()    
+    if game_level < 6:
+        handle_bullets_collision()     
+        handle_level_up()    
     pygame.display.update()
 
 pygame.quit()
