@@ -29,10 +29,6 @@ class EnemySpaceship(Spaceship):
 		else:
 			self.x += distance
 		self.y += 2.2
-	# def move_x(self) -> None:
-	# 	self.x += 2.5
-	# def move_y(self) -> None:
-	# 	self.y += 2.2
 
 	def move_x_by(self, distance:float) -> None:
 		self.x += distance
