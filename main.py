@@ -78,7 +78,6 @@ def create_boss() -> BossSpaceship:
 def create_boss_hp_bar(health_point) -> None:
     pygame.draw.rect(screen, (255,0,0), pygame.Rect(125, 45, 200, 20), 2) # no color-filled inside
     pygame.draw.rect(screen, (255,0,0), pygame.Rect(125, 45, health_point, 20)) # color-filled inside
-    # pass
 
 def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int = 130) -> None: # number_of_rows is equal to game level
     global running
@@ -189,7 +188,6 @@ while running:
         is_created_game_opening = True
         
     for enemy_spaceship in enemy_fleet:
-        # enemy_spaceship.y = 90
         enemy_spaceship.draw(screen)
         if enemy_spaceship.name != "boss":
             if len(enemy_bullets) == 0:
