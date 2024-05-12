@@ -82,13 +82,9 @@ def create_boss_hp_bar(health_point) -> None:
 def create_enemies_for_level_recursively(number_of_rows: int, y_coordinate:int = 130) -> None: # number_of_rows is equal to game level
     global running
     global enemy_bullets
-    if number_of_rows > 5:
-        # enemy_bullets.clear()
-        # Tk().wm_withdraw() #to hide the main window
-        # messagebox.showinfo('Info','Congratulations, you have finished the game')
-        # running = False
+    if number_of_rows > 4:
         return
-    if number_of_rows == 5:
+    if number_of_rows == 4:
         boss = create_boss()
         enemy_fleet.append(boss)
         return
