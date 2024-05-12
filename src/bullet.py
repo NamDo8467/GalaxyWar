@@ -17,4 +17,3 @@ class Bullet:
 
 	def draw(self, screen: Surface)->None:
 		screen.blit(self.shape, (self.x, self.y))
-		# pygame.draw.rect(screen, self.color, self.shape)
