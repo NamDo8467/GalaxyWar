@@ -10,7 +10,7 @@ class BossSpaceship(Spaceship):
 		super().__init__(x,y,name)
 		self.width:float = dimension["boss"][0]
 		self.height:float = dimension["boss"][1]
-		self.health_point:float = 200
+		self.health_point:float = 200 # initial health point for boss
 
 		
 	def draw(self, screen:Surface)->None:
