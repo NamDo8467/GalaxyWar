@@ -206,7 +206,7 @@ while running:
             if len(enemy_bullets) <= 6:
                 enemy_bullets.append(boss_bullet)
              
-    if game_level < 6:
+    if game_level < 5:
         handle_bullets_collision()     
         handle_level_up()    
     pygame.display.update()
